@@ -123,6 +123,16 @@ Defaults to:
   }
 ```
 
+#### autoprefixStyles
+
+Allows to apply autoprefixer to the styles found in the bundled html.
+
+Defaults to `false`.
+
+```js
+  autoprefixStyles: true
+```
+
 #### bundlerOutput
 
 The output file produced by [polymer-bundler](https://github.com/Polymer/polymer-bundler) for all bundled html code and styling.
