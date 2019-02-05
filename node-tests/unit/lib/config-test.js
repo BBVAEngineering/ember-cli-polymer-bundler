@@ -29,6 +29,15 @@ describe('config', () => {
 		assert.ok(this.options);
 	});
 
+	it('sets target browsers for autoprefixer from app build targets', function() {
+		app.project.targets = {
+			browsers: ['last 1 version']
+		};
+
+		this.options = new Config(app, ui);
+		assert.deepStrictEqual(this.options.autoprefixer.browsers, app.project.targets.browsers);
+	});
+
 	it('wrong bundlerOutput extension throws an error', function() {
 		assert.throws(() => {
 			this.options.bundlerOutput = 'elements.wrongextension';
