@@ -88,7 +88,7 @@ module.exports = {
 		const bundler = new ElementBundler(writer, {
 			input: filepath,
 			output: this.options.bundlerOutput,
-			autoprefixStyles: this.options.autoprefixStyles
+			autoprefixer: this.options.autoprefixer
 		}, this.options.bundlerOptions);
 
 		// merge normal tree and our bundler tree
