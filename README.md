@@ -123,15 +123,23 @@ Defaults to:
   }
 ```
 
-#### autoprefixStyles
+#### autoprefixer
 
-Allows to apply autoprefixer to the styles found in the bundled html.
+Allows to apply autoprefixer to the styles found in the bundled html. 
 
-Defaults to `false`.
+Set `autoprefixer.enabled` to `true` to activate this feature.
+
+Example:
 
 ```js
-  autoprefixStyles: true
+  autoprefixer: {
+    browsers: ['last 2 versions'],
+    enabled: true,
+    cascade: false
+  }
 ```
+
+If `browsers` are not set, the application build targets are used.
 
 #### bundlerOutput
 
