@@ -1,3 +1,11 @@
+# [0.1.0](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.0.3...v0.1.0) (2019-02-06)
+
+
+### Features
+
+* **bundler:** allow to config autoprefixer options ([ba1a38a](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/ba1a38a))
+* **bundler:** allows to apply autoprefixer to the output ([b510136](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/b510136))
+
 ## [0.0.3](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.0.2...v0.0.3) (2019-02-04)
 
 
