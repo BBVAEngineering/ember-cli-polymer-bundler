@@ -1,0 +1,17 @@
+{
+  "all": true,
+  "include": [
+    "index.js",
+    "lib/*.js"
+  ],
+  "reporter": [
+    "html",
+    "json",
+    "json-summary",
+    "lcov"
+  ],
+  "report-dir": "coverage/node",
+  "exclude": [
+    "**/config/*"
+  ]
+}
