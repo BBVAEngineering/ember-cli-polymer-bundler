@@ -45,7 +45,7 @@ module.exports = {
 			? `<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`
 			: '';
 
-		return `${polymerSettings}<link rel="${rel}" href="${href}">`;
+		return `${polymerSettings}\n<link rel="${rel}" href="${href}">`;
 	},
 
 	postprocessTree(type, tree) {
