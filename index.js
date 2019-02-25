@@ -13,6 +13,10 @@ const extractDeps = require('./lib/extractor');
 module.exports = {
 	name: require('./package').name,
 
+	isDevelopingAddon() {
+		return true;
+	},
+
 	included(appOrAddon) {
 		this._super.included.apply(this, arguments);
 
@@ -29,27 +33,19 @@ module.exports = {
 
 	// insert polymer and bundled elements
 	contentFor(type, config) {
-		if (type === 'head') {
-			let href = path.join(config.rootURL, this.options.bundlerOutput);
-
-			if (this.options.useRelativePath) {
-				href = this.options.bundlerOutput;
-			}
-
-			let content;
-
-			if (this.options.globalPolymerSettings) {
-				const settings = JSON.stringify(this.options.globalPolymerSettings);
-
-				content = `<script> window.Polymer = ${settings}; </script>`;
-			}
-
-			content += `<link rel="import" href="${href}">`;
-
-			return content;
+		if (type !== 'head') {
+			return null;
 		}
 
-		return null;
+		const { bundlerOutput, useRelativePath, globalPolymerSettings, lazyImport } = this.options;
+
+		const href = useRelativePath ? bundlerOutput : path.join(config.rootURL, bundlerOutput);
+		const rel = lazyImport ? 'lazy-import' : 'import';
+		const polymerSettings = globalPolymerSettings
+			? `<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`
+			: '';
+
+		return `${polymerSettings}<link rel="${rel}" href="${href}">`;
 	},
 
 	postprocessTree(type, tree) {
