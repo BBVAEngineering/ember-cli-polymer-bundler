@@ -29,13 +29,14 @@ module.exports = {
 			'config/**/*.js',
 			'tests/dummy/config/**/*.js',
 			'lib/**/*.js',
-			'node-tests/unit/**/*.js'
+			'node-tests/**/**/*.js'
 		],
 		excludedFiles: [
 			'addon/**',
 			'addon-test-support/**',
 			'app/**',
-			'tests/dummy/app/**'
+			'tests/dummy/app/**',
+			'node-tests/addon/ember-cli-build-*.js'
 		],
 		parserOptions: {
 			sourceType: 'script',
@@ -48,7 +49,8 @@ module.exports = {
 		},
 		plugins: ['node'],
 		rules: Object.assign({}, require('eslint-plugin-node').configs.recommended.rules, {
-			'no-process-env': 0
+			'no-process-env': 0,
+			'node/no-unpublished-require': 0
 		})
 	}]
 };
