@@ -173,6 +173,16 @@ Defaults to ``.
   }
 ```
 
+#### lazyImport
+
+Allows to set the `rel` attribute of the bundle import tag to "lazy-import" instead of "import" to prevent downloading the bundle.
+
+Defaults to `false`
+
+```js
+  lazyImport: true
+```
+
 ## About
 
 This addon was sponsored by [Fabriquartz](http://www.fabriquartz.com/), a startup based in The Netherlands.
