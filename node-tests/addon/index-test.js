@@ -137,5 +137,4 @@ describe('ember-cli-build addon options', function() {
 			assertContains(outputFilePath('index.html'), 'href="/');
 		});
 	});
-
 });
