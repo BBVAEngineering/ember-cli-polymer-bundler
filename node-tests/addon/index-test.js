@@ -12,7 +12,8 @@ const TEST_TIMEOUT = 120000;
 const MOCK_EMBER_CLI_CONFIGS = {
 	lazyImport: path.resolve(__dirname, 'ember-cli-build-lazy-import.js'),
 	relativePath: path.resolve(__dirname, 'ember-cli-build-relative-path.js'),
-	default: path.resolve(__dirname, 'ember-cli-build-default.js')
+	default: path.resolve(__dirname, 'ember-cli-build-default.js'),
+	globalPolymerSettings: path.resolve(__dirname, 'ember-cli-build-global-polymer-settings.js')
 };
 const emberCLIPath = path.resolve(__dirname, '../../node_modules/ember-cli/bin/ember');
 const fixturePath = path.resolve(__dirname, '../..');
@@ -90,6 +91,28 @@ describe('ember-cli-build addon options', function() {
 
 		it('sets "bundlerOutput" as the href attribute value of the bundle import tag', () => {
 			assertContains(outputFilePath('index.html'), 'href="../any.html"');
+		});
+	});
+
+	context('Using "globalPolymerSettings"', () => {
+		const mockConfigFile = MOCK_EMBER_CLI_CONFIGS.globalPolymerSettings;
+
+		before(() => {
+			mockConfig(mockConfigFile);
+			return runEmberCommand(fixturePath, 'build --prod');
+		});
+
+		after(() => {
+			restoreConfig(mockConfigFile);
+			return cleanup(fixturePath);
+		});
+
+		it('writes a script tag with the Polymer global settings', () => {
+			assertContains(outputFilePath('index.html'), '<script>window.Polymer = {');
+		});
+
+		it('writes the script tag before the import tag', () => {
+			assertContains(outputFilePath('index.html'), '</script>\n<link rel="import"');
 		});
 	});
 
