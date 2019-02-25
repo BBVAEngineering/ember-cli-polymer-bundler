@@ -9,7 +9,7 @@
     "start": "ember server",
     "pretest": "npm run clean-coverage",
     "test": "npm run test:node && npm run test:ember",
-    "test:node": "nyc mocha node-tests/**/*-test.js",
+    "test:node": "nyc mocha --recursive 'node-tests/**/*-test.js'",
     "test:ember": "COVERAGE=true ember test",
     "clean-coverage": "rm -rf coverage",
     "merge-coverage": "cp coverage/ember/coverage-final.json coverage/ember.json && cp coverage/node/coverage-final.json coverage/node.json && nyc merge coverage coverage/coverage-final.json",
@@ -55,6 +55,7 @@
     "mocha": "^5.0.0",
     "nyc": "^13.1.0",
     "qunit-dom": "^0.8.0",
+    "rimraf": "^2.6.3",
     "semantic-release": "^15.13.3"
   },
   "keywords": [
