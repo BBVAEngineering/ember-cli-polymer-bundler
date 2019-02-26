@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.1.0...v0.2.0) (2019-02-26)
+
+
+### Features
+
+* **config:** add an option to use "lazy-import" for the bundle ([22d7bb0](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/22d7bb0))
+
 # [0.1.0](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.0.3...v0.1.0) (2019-02-06)
 
 
