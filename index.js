@@ -46,7 +46,7 @@ module.exports = {
 
 		// TODO: import custom-es5-adapter from bower_components
 		if (babelify.enabled) {
-			es5Adapter = `<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.7/custom-elements-es5-adapter.js"></script>`;
+			es5Adapter = '<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.7/custom-elements-es5-adapter.js"></script>';
 		}
 
 		const href = useRelativePath ? bundlerOutput : path.join(config.rootURL, bundlerOutput);
