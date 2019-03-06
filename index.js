@@ -23,8 +23,11 @@ module.exports = {
 		// config
 		const app = appOrAddon.app || appOrAddon;
 
+		this._app = app;
+
 		this.options = new Config(app, this.ui);
 
+		// TODO: import polyfill before bundle
 		// import webcomponentsjs polyfill library
 		if (this.options.polyfillBundle && this.options.polyfillBundle !== 'none') {
 			app.import(`${app.bowerDirectory}/webcomponentsjs/webcomponents-${this.options.polyfillBundle}.js`);
@@ -37,7 +40,14 @@ module.exports = {
 			return null;
 		}
 
-		const { bundlerOutput, useRelativePath, globalPolymerSettings, lazyImport } = this.options;
+		const { bundlerOutput, useRelativePath, globalPolymerSettings, lazyImport, babelify } = this.options;
+
+		let es5Adapter = '';
+
+		// TODO: import custom-es5-adapter from bower_components
+		if (babelify.enabled) {
+			es5Adapter = `<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.7/custom-elements-es5-adapter.js"></script>`;
+		}
 
 		const href = useRelativePath ? bundlerOutput : path.join(config.rootURL, bundlerOutput);
 		const rel = lazyImport ? 'lazy-import' : 'import';
@@ -45,7 +55,7 @@ module.exports = {
 			? `<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`
 			: '';
 
-		return `${polymerSettings}\n<link rel="${rel}" href="${href}">`;
+		return `${es5Adapter}\n${polymerSettings}\n<link rel="${rel}" href="${href}">`;
 	},
 
 	postprocessTree(type, tree) {
@@ -84,7 +94,8 @@ module.exports = {
 		const bundler = new ElementBundler(writer, {
 			input: filepath,
 			output: this.options.bundlerOutput,
-			autoprefixer: this.options.autoprefixer
+			autoprefixer: this.options.autoprefixer,
+			babelify: this.options.babelify
 		}, this.options.bundlerOptions);
 
 		// merge normal tree and our bundler tree
