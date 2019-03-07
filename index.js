@@ -26,12 +26,6 @@ module.exports = {
 		this._app = app;
 
 		this.options = new Config(app, this.ui);
-
-		// TODO: import polyfill before bundle
-		// import webcomponentsjs polyfill library
-		if (this.options.polyfillBundle && this.options.polyfillBundle !== 'none') {
-			app.import(`${app.bowerDirectory}/webcomponentsjs/webcomponents-${this.options.polyfillBundle}.js`);
-		}
 	},
 
 	// insert polymer and bundled elements
@@ -40,22 +34,43 @@ module.exports = {
 			return null;
 		}
 
-		const { bundlerOutput, useRelativePath, globalPolymerSettings, lazyImport, babelify } = this.options;
+		const headContents = [];
 
-		let es5Adapter = '';
+		headContents.push(this.getOptionalContents());
 
-		// TODO: import custom-es5-adapter from bower_components
-		if (babelify.enabled) {
-			es5Adapter = '<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.7/custom-elements-es5-adapter.js"></script>';
-		}
-
+		const { bundlerOutput, useRelativePath, lazyImport } = this.options;
 		const href = useRelativePath ? bundlerOutput : path.join(config.rootURL, bundlerOutput);
 		const rel = lazyImport ? 'lazy-import' : 'import';
-		const polymerSettings = globalPolymerSettings
-			? `<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`
-			: '';
+		const htmlImport = `<link rel="${rel}" href="${href}">`;
 
-		return `${es5Adapter}\n${polymerSettings}\n<link rel="${rel}" href="${href}">`;
+		headContents.push(htmlImport);
+
+		return headContents.join('\n');
+	},
+
+	getOptionalContents() {
+		const { babelify, polyfillBundle, globalPolymerSettings } = this.options;
+
+		const output = [];
+		const webcomponentsPolyfillsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
+
+		if (babelify.enabled) {
+			const customElementsEs5Adapter = path.join(webcomponentsPolyfillsPath, 'custom-elements-es5-adapter.js');
+
+			output.push(`<script src="${customElementsEs5Adapter}"></script>`);
+		}
+
+		if (polyfillBundle && polyfillBundle !== 'none') {
+			const webcomponentsPolyfill = path.join(webcomponentsPolyfillsPath, `webcomponents-${polyfillBundle}.js`);
+
+			output.push(`<script src="${webcomponentsPolyfill}"></script>`);
+		}
+
+		if (globalPolymerSettings) {
+			output.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
+		}
+
+		return output.join('\n');
 	},
 
 	postprocessTree(type, tree) {
