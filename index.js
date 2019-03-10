@@ -28,22 +28,17 @@ module.exports = {
 		this.options = new Config(app, this.ui);
 	},
 
-	// insert polymer and bundled elements
+	// insert polyfills and bundled elements
 	contentFor(type, config) {
 		if (type !== 'head') {
 			return null;
 		}
 
 		const headContents = [];
+		const optionalContents = this.getOptionalContents();
+		const bundleImport = this.getBundleImport(config);
 
-		headContents.push(this.getOptionalContents());
-
-		const { bundlerOutput, useRelativePath, lazyImport } = this.options;
-		const href = useRelativePath ? bundlerOutput : path.join(config.rootURL, bundlerOutput);
-		const rel = lazyImport ? 'lazy-import' : 'import';
-		const htmlImport = `<link rel="${rel}" href="${href}">`;
-
-		headContents.push(htmlImport);
+		headContents.push(optionalContents, bundleImport);
 
 		return headContents.join('\n');
 	},
@@ -52,7 +47,7 @@ module.exports = {
 		const { babelify, polyfillBundle, globalPolymerSettings } = this.options;
 
 		const output = [];
-		const webcomponentsPolyfillsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
+		const webcomponentsPolyfillsPath = path.join(this.project.bowerDirectory, 'webcomponentsjs');
 
 		if (babelify.enabled) {
 			const customElementsEs5Adapter = path.join(webcomponentsPolyfillsPath, 'custom-elements-es5-adapter.js');
@@ -71,6 +66,15 @@ module.exports = {
 		}
 
 		return output.join('\n');
+	},
+
+	getBundleImport(config) {
+		const { bundlerOutput, useRelativePath, lazyImport } = this.options;
+		const href = useRelativePath ? bundlerOutput : path.join(config.rootURL, bundlerOutput);
+		const rel = lazyImport ? 'lazy-import' : 'import';
+		const htmlImport = `<link rel="${rel}" href="${href}">`;
+
+		return htmlImport;
 	},
 
 	postprocessTree(type, tree) {
