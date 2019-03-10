@@ -44,12 +44,12 @@ module.exports = {
 	},
 
 	getOptionalContents() {
-		const { babelify, polyfillBundle, globalPolymerSettings } = this.options;
+		const { buildForProduction, polyfillBundle, globalPolymerSettings } = this.options;
 
 		const output = [];
 		const webcomponentsPolyfillsPath = path.join(this.project.bowerDirectory, 'webcomponentsjs');
 
-		if (babelify.enabled) {
+		if (buildForProduction.enabled) {
 			const customElementsEs5Adapter = path.join(webcomponentsPolyfillsPath, 'custom-elements-es5-adapter.js');
 
 			output.push(`<script src="${customElementsEs5Adapter}"></script>`);
@@ -83,12 +83,9 @@ module.exports = {
 		}
 
 		// auto element import
-		const bowerPath = path.join(this.options.projectRoot,
-			this.project.bowerDirectory);
-		const bowerPackages = scrapeDeps(this.project.bowerDependencies(),
-			bowerPath, 'bower.json');
-		const npmPackages = scrapeDeps(this.project.dependencies(),
-			path.resolve('node_modules'), 'package.json');
+		const bowerPath = path.join(this.options.projectRoot, this.project.bowerDirectory);
+		const bowerPackages = scrapeDeps(this.project.bowerDependencies(), bowerPath, 'bower.json');
+		const npmPackages = scrapeDeps(this.project.dependencies(), path.resolve('node_modules'), 'package.json');
 		const packages = bowerPackages.concat(npmPackages);
 		const exclude = (pkg) => !this.options.excludeElements.includes(pkg.name);
 		let elementPaths = packages.filter(exclude).map((pkg) => pkg.elementPath);
