@@ -9,8 +9,9 @@ module.exports = function(defaults) {
 		'ember-cli-polymer-bundler': {
 			htmlImportsFile: path.join('tests', 'dummy', 'app', 'elements.html'),
 			useRelativePath: true,
-			babelify: {
-				enabled: true
+			buildForProduction: {
+				enabled: true,
+				transpileExclude: [/paper-/, /iron-/, /app-/]
 			},
 			autoprefixer: {
 				browsers: ['chrome >= 30', 'firefox >= 32', 'ios >= 9', 'last 1 edge versions'],
