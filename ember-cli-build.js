@@ -10,8 +10,7 @@ module.exports = function(defaults) {
 			htmlImportsFile: path.join('tests', 'dummy', 'app', 'elements.html'),
 			useRelativePath: true,
 			buildForProduction: {
-				enabled: true,
-				transpileExclude: [/paper-/, /iron-/, /app-/]
+				enabled: false
 			},
 			autoprefixer: {
 				browsers: ['chrome >= 30', 'firefox >= 32', 'ios >= 9', 'last 1 edge versions'],
