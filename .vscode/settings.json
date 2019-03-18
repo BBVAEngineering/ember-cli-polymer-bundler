@@ -9,9 +9,6 @@
     "**/.git": true,
     "**/.DS_Store": true,
     "**/node_modules": true,
-    "**/bower_components": true,
-    "**/dist": true,
-    "dist": true,
     "tmp": true
   }
 }
