@@ -3,8 +3,8 @@
 const path = require('path');
 // broccoli plugins
 const MergeTrees = require('broccoli-merge-trees');
-const ElementBundler = require('./lib/bundler');
 const ElementWriter = require('./lib/writer');
+const ElementBundler = require('./lib/bundler');
 // internals
 const Config = require('./lib/config');
 const { scrapeDeps } = require('./lib/scraper');
@@ -47,7 +47,7 @@ module.exports = {
 		const { buildForProduction, polyfillBundle, globalPolymerSettings } = this.options;
 
 		const output = [];
-		const webcomponentsPolyfillsPath = path.join(this.project.bowerDirectory, 'webcomponentsjs');
+		const webcomponentsPolyfillsPath = path.join('assets', this.project.bowerDirectory, 'webcomponentsjs');
 
 		if (buildForProduction.enabled) {
 			const customElementsEs5Adapter = path.join(webcomponentsPolyfillsPath, 'custom-elements-es5-adapter.js');
@@ -106,12 +106,20 @@ module.exports = {
 
 		// write and bundle
 		const filepath = path.basename(this.options.htmlImportsFile);
-		const writer = new ElementWriter(elementPaths, filepath);
+		const buildForProduction = {
+			enabled: this.options.buildForProduction.enabled,
+			allImportsFile: this.options.allImportsFile
+		};
+		const writer = new ElementWriter(
+			elementPaths,
+			filepath,
+			buildForProduction
+		);
+
 		const bundler = new ElementBundler(writer, {
 			input: filepath,
 			output: this.options.bundlerOutput,
-			autoprefixer: this.options.autoprefixer,
-			babelify: this.options.babelify
+			autoprefixer: this.options.autoprefixer
 		}, this.options.bundlerOptions);
 
 		// merge normal tree and our bundler tree
