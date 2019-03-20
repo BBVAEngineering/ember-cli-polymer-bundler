@@ -9,6 +9,7 @@ const ElementBundler = require('./lib/bundler');
 const Config = require('./lib/config');
 const { scrapeDeps } = require('./lib/scraper');
 const extractDeps = require('./lib/extractor');
+const fs = require('fs-extra');
 
 module.exports = {
 	name: require('./package').name,
@@ -19,13 +20,27 @@ module.exports = {
 
 	included(appOrAddon) {
 		this._super.included.apply(this, arguments);
+		this._app = appOrAddon.app || appOrAddon;
+		this.options = new Config(this._app, this.ui);
 
-		// config
-		const app = appOrAddon.app || appOrAddon;
+		this.importPolyfills();
+	},
 
-		this._app = app;
+	importPolyfills() {
+		const { polyfillBundle, buildForProduction } = this.options;
 
-		this.options = new Config(app, this.ui);
+		const webcomponentsjsPath = path.join(this.project.bowerDirectory, 'webcomponentsjs');
+		const customElementsEs5Adapter = path.join(webcomponentsjsPath, 'custom-elements-es5-adapter.js');
+		const webcomponentsjsPolyfill = path.join(webcomponentsjsPath, `webcomponents-${polyfillBundle}.js`);
+
+		// Import custom-elements-es5-adapter if ES6 Classes are transpiled to ES5
+		// for browsers that natively support Custom Elements
+		// https://github.com/webcomponents/webcomponentsjs#custom-elements-es5-adapterjs
+		if (buildForProduction.enabled && buildForProduction.build.js.compile) {
+			this._app.import(customElementsEs5Adapter, { options: 'prepend' });
+		}
+
+		this._app.import(webcomponentsjsPolyfill, { options: 'prepend' });
 	},
 
 	// insert polyfills and bundled elements
@@ -35,37 +50,15 @@ module.exports = {
 		}
 
 		const headContents = [];
-		const optionalContents = this.getOptionalContents();
-		const bundleImport = this.getBundleImport(config);
-
-		headContents.push(optionalContents, bundleImport);
-
-		return headContents.join('\n');
-	},
-
-	getOptionalContents() {
-		const { buildForProduction, polyfillBundle, globalPolymerSettings } = this.options;
-
-		const output = [];
-		const webcomponentsPolyfillsPath = path.join('assets', this.project.bowerDirectory, 'webcomponentsjs');
-
-		if (buildForProduction.enabled) {
-			const customElementsEs5Adapter = path.join(webcomponentsPolyfillsPath, 'custom-elements-es5-adapter.js');
-
-			output.push(`<script src="${customElementsEs5Adapter}"></script>`);
-		}
-
-		if (polyfillBundle && polyfillBundle !== 'none') {
-			const webcomponentsPolyfill = path.join(webcomponentsPolyfillsPath, `webcomponents-${polyfillBundle}.js`);
-
-			output.push(`<script src="${webcomponentsPolyfill}"></script>`);
-		}
+		const { globalPolymerSettings } = this.options;
 
 		if (globalPolymerSettings) {
-			output.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
+			headContents.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
 		}
 
-		return output.join('\n');
+		headContents.push(this.getBundleImport(config));
+
+		return headContents.join('\n');
 	},
 
 	getBundleImport(config) {
@@ -106,10 +99,12 @@ module.exports = {
 
 		// write and bundle
 		const filepath = path.basename(this.options.htmlImportsFile);
-		const buildForProduction = {
-			enabled: this.options.buildForProduction.enabled,
-			allImportsFile: this.options.allImportsFile
-		};
+
+		const buildForProduction = Object.assign({}, this.options.buildForProduction, {
+			allImportsFile: this.options.allImportsFile,
+			tmpDestPath: this.options.tempPolymerBuildOutputPath
+		});
+
 		const writer = new ElementWriter(
 			elementPaths,
 			filepath,
@@ -119,7 +114,8 @@ module.exports = {
 		const bundler = new ElementBundler(writer, {
 			input: filepath,
 			output: this.options.bundlerOutput,
-			autoprefixer: this.options.autoprefixer
+			autoprefixer: this.options.autoprefixer,
+			buildForProduction
 		}, this.options.bundlerOptions);
 
 		// merge normal tree and our bundler tree
@@ -127,5 +123,12 @@ module.exports = {
 			overwrite: true,
 			annotation: 'Merge (ember-cli-polymer-bundler merge bundler with addon tree)'
 		});
+	},
+
+	postBuild() {
+		if (this.options.buildForProduction.enabled) {
+			fs.removeSync(this.options.tempPolymerBuildOutputPath);
+			fs.removeSync(this.options.allImportsFile);
+		}
 	}
 };
