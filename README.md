@@ -118,8 +118,7 @@ Defaults to:
 
 ```js
   bundlerOptions: {
-    inlineCss: true,
-    inlineScripts: true
+    stripComments: true
   }
 ```
 
