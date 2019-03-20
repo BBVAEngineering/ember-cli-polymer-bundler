@@ -29,7 +29,7 @@ module.exports = {
 	importPolyfills() {
 		const { polyfillBundle, buildForProduction } = this.options;
 
-		const webcomponentsjsPath = path.join(this.project.bowerDirectory, 'webcomponentsjs');
+		const webcomponentsjsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
 		const customElementsEs5Adapter = path.join(webcomponentsjsPath, 'custom-elements-es5-adapter.js');
 		const webcomponentsjsPolyfill = path.join(webcomponentsjsPath, `webcomponents-${polyfillBundle}.js`);
 
