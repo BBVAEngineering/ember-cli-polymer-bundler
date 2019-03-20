@@ -182,6 +182,33 @@ Defaults to `false`
   lazyImport: true
 ```
 
+#### buildForProduction
+
+Builds the bundled file using [`polymer build`](https://polymer-library.polymer-project.org/2.0/docs/apps/build-for-production).
+
+The `build` property accepts an object with the [same options for a build using `polymer build`](https://polymer-library.polymer-project.org/2.0/docs/tools/polymer-json#builds).
+
+Default configuration:
+
+```js
+buildForProduction = {
+  enabled: false,
+  build: {
+    csp: true, // splits HTML and JavaScript for CSP
+    js: {
+      minify: true,
+      compile: true
+    },
+    css: {
+      minify: true
+    },
+    html: {
+      minify: true
+    }
+  }
+};
+```
+
 ## About
 
 This addon was sponsored by [Fabriquartz](http://www.fabriquartz.com/), a startup based in The Netherlands.
