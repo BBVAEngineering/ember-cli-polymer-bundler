@@ -43,22 +43,4 @@ describe('config', () => {
 			this.options.bundlerOutput = 'elements.wrongextension';
 		}, Error);
 	});
-
-	it('vulcanizeOutput is deprecation is handled', function() {
-		const out = 'some/output/path.html';
-
-		this.options.vulcanizeOutput = out;
-
-		assert.strictEqual(this.options.bundlerOutput, out);
-	});
-
-	it('vulcanizeOptions is deprecation is handled', function() {
-		const opts = {
-			some: 'options'
-		};
-
-		this.options.vulcanizeOptions = opts;
-
-		assert.strictEqual(this.options.bundlerOptions, opts);
-	});
 });
