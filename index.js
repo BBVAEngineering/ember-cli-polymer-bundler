@@ -3,8 +3,8 @@
 const path = require('path');
 // broccoli plugins
 const MergeTrees = require('broccoli-merge-trees');
-const ElementWriter = require('./lib/writer');
 const ElementBundler = require('./lib/bundler');
+const ElementWriter = require('./lib/writer');
 // internals
 const Config = require('./lib/config');
 const { scrapeDeps } = require('./lib/scraper');
