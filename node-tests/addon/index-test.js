@@ -13,7 +13,8 @@ const MOCK_EMBER_CLI_CONFIGS = {
 	lazyImport: path.resolve(__dirname, 'ember-cli-build-lazy-import.js'),
 	relativePath: path.resolve(__dirname, 'ember-cli-build-relative-path.js'),
 	default: path.resolve(__dirname, 'ember-cli-build-default.js'),
-	globalPolymerSettings: path.resolve(__dirname, 'ember-cli-build-global-polymer-settings.js')
+	globalPolymerSettings: path.resolve(__dirname, 'ember-cli-build-global-polymer-settings.js'),
+	buildForProduction: path.resolve(__dirname, 'ember-cli-build-build-for-production.js')
 };
 const emberCLIPath = path.resolve(__dirname, '../../node_modules/ember-cli/bin/ember');
 const fixturePath = path.resolve(__dirname, '../..');
@@ -31,14 +32,18 @@ function runEmberCommand(packagePath, command) {
 	);
 }
 
-function outputFilePath(file) {
-	return path.join(fixturePath, 'dist', file);
+function outputFilePath(file, dir = 'dist') {
+	return path.join(fixturePath, dir, file);
 }
 
 function assertContains(filePath, regexp) {
 	const fileContent = fs.readFileSync(filePath, 'utf8');
 
 	assert.ok(fileContent.match(regexp), `${filePath} contains ${regexp}`);
+}
+
+function assertFileExists(filePath) {
+	assert.ok(fs.existsSync(filePath), `${filePath} exists`);
 }
 
 function cleanup(packagePath) {
@@ -113,6 +118,29 @@ describe('ember-cli-build addon options', function() {
 
 		it('writes the script tag before the import tag', () => {
 			assertContains(outputFilePath('index.html'), '</script>\n<link rel="import"');
+		});
+	});
+
+	context('Using "buildForProduction"', () => {
+		const mockConfigFile = MOCK_EMBER_CLI_CONFIGS.buildForProduction;
+
+		before(() => {
+			mockConfig(mockConfigFile);
+			return runEmberCommand(fixturePath, 'build --prod');
+		});
+
+		after(() => {
+			restoreConfig(mockConfigFile);
+			return cleanup(fixturePath);
+		});
+
+		it('generates separate files for HTML and JavaScript if build.csp is true', () => {
+			assertFileExists(fixturePath, 'dist/assets/bundled.html');
+			assertFileExists(fixturePath, 'dist/assets/bundled.js');
+		});
+
+		it('imports custom-elements-es5-adapter.js if build.js.compile is true', () => {
+			assertContains(outputFilePath('vendor.js', 'dist/assets/'), 'HTMLElement.prototype.constructor=HTMLElement');
 		});
 	});
 
