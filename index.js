@@ -27,18 +27,10 @@ module.exports = {
 	},
 
 	importPolyfills() {
-		const { polyfillBundle, buildForProduction } = this.options;
+		const { polyfillBundle } = this.options;
 
 		const webcomponentsjsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
-		const customElementsEs5Adapter = path.join(webcomponentsjsPath, 'custom-elements-es5-adapter.js');
 		const webcomponentsjsPolyfill = path.join(webcomponentsjsPath, `webcomponents-${polyfillBundle}.js`);
-
-		// Import custom-elements-es5-adapter if ES6 Classes are transpiled to ES5
-		// for browsers that natively support Custom Elements
-		// https://github.com/webcomponents/webcomponentsjs#custom-elements-es5-adapterjs
-		if (buildForProduction.enabled && buildForProduction.build.js.compile) {
-			this._app.import(customElementsEs5Adapter, { options: 'prepend' });
-		}
 
 		this._app.import(webcomponentsjsPolyfill, { options: 'prepend' });
 	},
