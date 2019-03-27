@@ -103,8 +103,8 @@ module.exports = {
 			const relativePath = path.relative(this.options.projectRoot, ep);
 
 			this.ui.writeInfoLine(`The html import \`${relativePath}\` was already ` +
-                            'automatically imported ✨  You can remove this ' +
-                            'import. (ember-cli-polymer-bundler)');
+				'automatically imported ✨  You can remove this ' +
+				'import. (ember-cli-polymer-bundler)');
 		});
 
 		// write and bundle
