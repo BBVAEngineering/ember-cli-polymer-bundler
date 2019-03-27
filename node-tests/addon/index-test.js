@@ -115,10 +115,6 @@ describe('ember-cli-build addon options', function() {
 		it('writes a script tag with the Polymer global settings', () => {
 			assertContains(outputFilePath('index.html'), '<script>window.Polymer = {');
 		});
-
-		it('writes the script tag before the import tag', () => {
-			assertContains(outputFilePath('index.html'), '</script>\n<link rel="import"');
-		});
 	});
 
 	context('Using "buildForProduction"', () => {
@@ -140,7 +136,7 @@ describe('ember-cli-build addon options', function() {
 		});
 
 		it('imports custom-elements-es5-adapter.js if build.js.compile is true', () => {
-			assertContains(outputFilePath('vendor.js', 'dist/assets/'), 'HTMLElement.prototype.constructor=HTMLElement');
+			assertContains(outputFilePath('index.html'), 'src="assets/bower_components/webcomponentsjs/custom-elements-es5-adapter.js"');
 		});
 	});
 
