@@ -22,53 +22,56 @@ module.exports = {
 		this._super.included.apply(this, arguments);
 		this._app = appOrAddon.app || appOrAddon;
 		this.options = new Config(this._app, this.ui);
+
+		this.importPolyfill();
+	},
+
+	importPolyfill() {
+		const { polyfillBundle } = this.options;
+
+		if (polyfillBundle && polyfillBundle !== 'none') {
+			const webcomponentsjsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
+			const webcomponentsjsPolyfill = path.join(webcomponentsjsPath, `webcomponents-${polyfillBundle}.js`);
+
+			this._app.import(webcomponentsjsPolyfill, { options: 'prepend' });
+		}
 	},
 
 	// insert polyfills and bundled elements
 	contentFor(type, config) {
-		if (type !== 'head') {
-			return null;
+		if (type === 'head-footer') {
+			const headContents = [];
+			const { globalPolymerSettings, buildForProduction } = this.options;
+
+			if (globalPolymerSettings) {
+				headContents.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
+			}
+
+			if (buildForProduction.enabled && buildForProduction.build.js.compile) {
+				headContents.push(this.getCustomEs5Adapter());
+			}
+
+			return headContents.join('\n');
+		} else if (type === 'body-footer') {
+			return this.getBundleImport(config);
 		}
 
-		const headContents = [];
-		const { globalPolymerSettings } = this.options;
-
-		if (globalPolymerSettings) {
-			headContents.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
-		}
-
-		headContents.push(
-			this.getPolyfills(),
-			this.getBundleImport(config)
-		);
-
-		return headContents.join('\n');
+		return null;
 	},
 
-	getPolyfills() {
-		const { polyfillBundle, buildForProduction } = this.options;
+	getCustomEs5Adapter() {
 		const webcomponentsPolyfillsPath = path.join('assets', this._app.bowerDirectory, 'webcomponentsjs');
-		const result = [];
-
-		if (polyfillBundle && polyfillBundle !== 'none') {
-			const webcomponentsPolyfill = path.join(webcomponentsPolyfillsPath, `webcomponents-${polyfillBundle}.js`);
-
-			result.push(`<script src="${webcomponentsPolyfill}"></script>`);
-		}
 
 		/**
 		 * Include custom-elements-es5-adapter only for browsers that natively support customElements
 		 * https://github.com/webcomponents/webcomponentsjs/issues/749#issuecomment-319174318
 		 */
-		if (buildForProduction.enabled && buildForProduction.build.js.compile) {
-			result.push(`
-			<script>if (!window.customElements) { document.write('<!--'); }</script>
-			<script type="text/javascript" src="${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js"></script>
-			<!--! do not remove -->
-			`);
-		}
+		const customEs5Adapter = `
+		<script>if (!window.customElements) { document.write('<!--'); }</script>
+		<script src="${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js"></script>
+		<!--! do not remove -->`;
 
-		return result.join('\n');
+		return customEs5Adapter;
 	},
 
 	getBundleImport(config) {
