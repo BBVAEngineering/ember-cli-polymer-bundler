@@ -22,25 +22,6 @@ module.exports = {
 		this._super.included.apply(this, arguments);
 		this._app = appOrAddon.app || appOrAddon;
 		this.options = new Config(this._app, this.ui);
-
-		this.importPolyfills();
-	},
-
-	importPolyfills() {
-		const { polyfillBundle, buildForProduction } = this.options;
-
-		const webcomponentsjsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
-		const customElementsEs5Adapter = path.join(webcomponentsjsPath, 'custom-elements-es5-adapter.js');
-		const webcomponentsjsPolyfill = path.join(webcomponentsjsPath, `webcomponents-${polyfillBundle}.js`);
-
-		// Import custom-elements-es5-adapter if ES6 Classes are transpiled to ES5
-		// for browsers that natively support Custom Elements
-		// https://github.com/webcomponents/webcomponentsjs#custom-elements-es5-adapterjs
-		if (buildForProduction.enabled && buildForProduction.build.js.compile) {
-			this._app.import(customElementsEs5Adapter, { options: 'prepend' });
-		}
-
-		this._app.import(webcomponentsjsPolyfill, { options: 'prepend' });
 	},
 
 	// insert polyfills and bundled elements
@@ -56,9 +37,38 @@ module.exports = {
 			headContents.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
 		}
 
-		headContents.push(this.getBundleImport(config));
+		headContents.push(
+			this.getPolyfills(),
+			this.getBundleImport(config)
+		);
 
 		return headContents.join('\n');
+	},
+
+	getPolyfills() {
+		const { polyfillBundle, buildForProduction } = this.options;
+		const webcomponentsPolyfillsPath = path.join('assets', this._app.bowerDirectory, 'webcomponentsjs');
+		const result = [];
+
+		if (polyfillBundle && polyfillBundle !== 'none') {
+			const webcomponentsPolyfill = path.join(webcomponentsPolyfillsPath, `webcomponents-${polyfillBundle}.js`);
+
+			result.push(`<script src="${webcomponentsPolyfill}"></script>`);
+		}
+
+		/**
+		 * Include custom-elements-es5-adapter only for browsers that natively support customElements
+		 * https://github.com/webcomponents/webcomponentsjs/issues/749#issuecomment-319174318
+		 */
+		if (buildForProduction.enabled && buildForProduction.build.js.compile) {
+			result.push(`
+			<script>if (!window.customElements) { document.write('<!--'); }</script>
+			<script type="text/javascript" src="${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js"></script>
+			<!--! do not remove -->
+			`);
+		}
+
+		return result.join('\n');
 	},
 
 	getBundleImport(config) {
