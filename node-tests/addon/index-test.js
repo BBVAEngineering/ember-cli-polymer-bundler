@@ -138,10 +138,6 @@ describe('ember-cli-build addon options', function() {
 			assertFileExists(fixturePath, 'dist/assets/bundled.html');
 			assertFileExists(fixturePath, 'dist/assets/bundled.js');
 		});
-
-		it('imports custom-elements-es5-adapter.js if build.js.compile is true', () => {
-			assertContains(outputFilePath('vendor.js', 'dist/assets/'), 'HTMLElement.prototype.constructor=HTMLElement');
-		});
 	});
 
 	context('Using default options', () => {
