@@ -64,12 +64,19 @@ module.exports = {
 
 		/**
 		 * Include custom-elements-es5-adapter only for browsers that natively support customElements
-		 * https://github.com/webcomponents/webcomponentsjs/issues/749#issuecomment-319174318
+		 * Using Rob Dodson solution: https://youtu.be/Ucq9F-7Xp8I?t=7m57s
+		 * https://github.com/webcomponents/webcomponentsjs/tree/v1#custom-elements-es5-adapterjs
 		 */
 		const customEs5Adapter = `
-		<script>if (!window.customElements) { document.write('<!--'); }</script>
-		<script src="${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js"></script>
-		<!--! do not remove -->`;
+		<div id="ce-es5-shim">
+			<script>
+				if (!window.customElements) {
+					var ceShimContainer = document.querySelector('#ce-es5-shim');
+					ceShimContainer.parentElement.removeChild(ceShimContainer);
+				}
+			</script>
+			<script src="${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js"></script>
+		</div>`;
 
 		return customEs5Adapter;
 	},
