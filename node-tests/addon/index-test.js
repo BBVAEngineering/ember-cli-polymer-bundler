@@ -140,7 +140,7 @@ describe('ember-cli-build addon options', function() {
 		});
 
 		it('imports native-shim.js if build.js.compile is true', () => {
-			assertContains(outputFilePath('vendor.js', 'dist/assets/'), 'var BuiltInHTMLElement');
+			assertContains(outputFilePath('vendor.js', 'dist/assets/'), 'window.HTMLElement');
 		});
 	});
 
