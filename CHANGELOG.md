@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.1...v0.3.2) (2019-03-28)
+
+
+### Bug Fixes
+
+* add test ([e91ee2d](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/e91ee2d))
+
 ## [0.3.1](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.0...v0.3.1) (2019-03-28)
 
 
