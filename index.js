@@ -31,7 +31,9 @@ module.exports = {
 
 		const webcomponentsjsPath = path.join(this._app.bowerDirectory, 'webcomponentsjs');
 		const webcomponentsjsPolyfill = path.join(webcomponentsjsPath, `webcomponents-${polyfillBundle}.js`);
+		const customElementsEs5Adapter = path.join(__dirname, 'polyfills/native-shim.js');
 
+		this._app.import(customElementsEs5Adapter, { options: 'prepend' });
 		this._app.import(webcomponentsjsPolyfill, { options: 'prepend' });
 	},
 
