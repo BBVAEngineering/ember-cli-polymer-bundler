@@ -138,6 +138,10 @@ describe('ember-cli-build addon options', function() {
 			assertFileExists(fixturePath, 'dist/assets/bundled.html');
 			assertFileExists(fixturePath, 'dist/assets/bundled.js');
 		});
+
+		it('imports native-shim.js if build.js.compile is true', () => {
+			assertContains(outputFilePath('vendor.js', 'dist/assets/'), 'var BuiltInHTMLElement');
+		});
 	});
 
 	context('Using default options', () => {
