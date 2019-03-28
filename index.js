@@ -68,15 +68,13 @@ module.exports = {
 		 * https://github.com/webcomponents/webcomponentsjs/tree/v1#custom-elements-es5-adapterjs
 		 */
 		const customEs5Adapter = `
-		<div id="ce-es5-shim">
-			<script>
-				if (!window.customElements) {
-					var ceShimContainer = document.querySelector('#ce-es5-shim');
-					ceShimContainer.parentElement.removeChild(ceShimContainer);
-				}
-			</script>
-			<script src="${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js"></script>
-		</div>`;
+		<script>
+			if (window.customElements) {
+				var ceE5Shim = document.createElement('script');
+				ceE5Shim.src = '${webcomponentsPolyfillsPath}/custom-elements-es5-adapter.js';
+				document.head.appendChild(ceE5Shim);
+			}
+		</script>`;
 
 		return customEs5Adapter;
 	},
