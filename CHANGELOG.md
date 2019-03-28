@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.0...v0.3.1) (2019-03-28)
+
+
+### Bug Fixes
+
+* remove incompatible polyfill ([86c3eaf](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/86c3eaf))
+
 # [0.3.0](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.2.0...v0.3.0) (2019-03-21)
 
 
