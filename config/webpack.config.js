@@ -8,8 +8,8 @@ const importMetaUriLoaderPath = require.resolve('@open-wc/webpack/loaders/import
 const importBabelLoaderPath = require.resolve('babel-loader');
 const babelLoaderInNodeModules = importBabelLoaderPath.split('/babel-loader')[0];
 
-module.exports = (dir) => ({
-	entry: { litComponents: path.join(dir, './es6-imports.js') },
+module.exports = (dir, litImportsFilename) => ({
+	entry: { litComponents: path.join(dir, litImportsFilename) },
 	mode: 'production',
 	output: {
 		path: path.join(dir, OUTPUT_PATH),
