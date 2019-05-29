@@ -69,7 +69,7 @@ module.exports = {
 		if (type !== 'all') {
 			return tree;
 		}
-		
+
 		// auto element import
 		const bowerPath = path.join(this.options.projectRoot, this.project.bowerDirectory);
 		const bowerPackages = scrapeDeps(this.project.bowerDependencies(), bowerPath, 'bower.json');
@@ -78,7 +78,7 @@ module.exports = {
 		const exclude = (pkg) => !this.options.excludeElements.includes(pkg.name);
 		let elementPaths = packages.filter(exclude).map((pkg) => pkg.elementPath);
 
-		//ES6 imports
+		// ES6 imports
 		elementPaths = elementPaths.concat(extractModules(this.options.htmlImportsFile));
 
 		// manual element import
