@@ -1,1 +1,1 @@
-import '@vaadin/vaadin-checkbox';
+import 'my-credit-card';
