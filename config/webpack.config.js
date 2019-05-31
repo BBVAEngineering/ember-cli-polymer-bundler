@@ -8,11 +8,11 @@ const importMetaUriLoaderPath = require.resolve('@open-wc/webpack/loaders/import
 const importBabelLoaderPath = require.resolve('babel-loader');
 const babelLoaderInNodeModules = importBabelLoaderPath.split('/babel-loader')[0];
 
-module.exports = (dir, litImportsFilename) => ({
-	entry: { litComponents: path.join(dir, litImportsFilename) },
+module.exports = ({ importFolder, litImportsFilename, alias }) => ({
+	entry: { litComponents: path.join(importFolder, litImportsFilename) },
 	mode: 'production',
 	output: {
-		path: path.join(dir, OUTPUT_PATH),
+		path: path.join(importFolder, OUTPUT_PATH),
 		publicPath: OUTPUT_PATH
 	},
 	module: {
@@ -54,9 +54,7 @@ module.exports = (dir, litImportsFilename) => ({
 		}
 	},
 	resolve: {
-		alias: {
-			'@elements': path.resolve(path.join(dir, 'elements/'))
-		}
+		alias
 	},
 	resolveLoader: {
 		modules: [babelLoaderInNodeModules, 'node_modules']
@@ -64,8 +62,8 @@ module.exports = (dir, litImportsFilename) => ({
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.join(dir, './lit-imports.html'),
-			filename: path.join(dir, '/lit-imports.html'),
+			template: path.join(importFolder, './lit-imports.html'),
+			filename: path.join(importFolder, '/lit-imports.html'),
 			cache: false
 		})
 	]
