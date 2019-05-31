@@ -31,28 +31,6 @@ module.exports = ({ importFolder, litImportsFilename, alias }) => ({
 			}
 		]
 	},
-	optimization: {
-		splitChunks: {
-			chunks(chunk) {
-				chunk.name = decamelize(chunk.name, '-');
-				return true;
-			},
-			minSize: 20000,
-			maxSize: 100000,
-			minChunks: 1,
-			maxAsyncRequests: 5,
-			maxInitialRequests: 3,
-			automaticNameDelimiter: '-',
-			name: true,
-			cacheGroups: {
-				commons: {
-					minChunks: 2,
-					priority: -20,
-					reuseExistingChunk: true
-				}
-			}
-		}
-	},
 	resolve: {
 		alias
 	},
