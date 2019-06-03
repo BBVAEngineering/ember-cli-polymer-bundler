@@ -1,19 +1,16 @@
 const path = require('path');
-const decamelize = require('decamelize');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const OUTPUT_PATH = 'dist/scripts/lit';
 
 const importMetaUriLoaderPath = require.resolve('@open-wc/webpack/loaders/import-meta-url-loader.js');
 const importBabelLoaderPath = require.resolve('babel-loader');
 const babelLoaderInNodeModules = importBabelLoaderPath.split('/babel-loader')[0];
 
-module.exports = ({ importFolder, litImportsFilename, alias }) => ({
+module.exports = ({ importFolder, litOutputFolder, litImportsFilename, alias }) => ({
 	entry: { litComponents: path.join(importFolder, litImportsFilename) },
 	mode: 'production',
 	output: {
-		path: path.join(importFolder, OUTPUT_PATH),
-		publicPath: OUTPUT_PATH
+		path: litOutputFolder,
+		publicPath: litOutputFolder
 	},
 	module: {
 		rules: [
@@ -40,8 +37,8 @@ module.exports = ({ importFolder, litImportsFilename, alias }) => ({
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.join(importFolder, './lit-imports.html'),
-			filename: path.join(importFolder, '/lit-imports.html'),
+			template: path.join(litOutputFolder, './lit-imports.html'),
+			filename: path.join(litOutputFolder, '/lit-imports.html'),
 			cache: false
 		})
 	]

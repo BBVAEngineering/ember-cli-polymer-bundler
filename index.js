@@ -85,7 +85,8 @@ module.exports = {
 			importAlias: {
 				key: `@${this.options.importAlias.key}`,
 				folder: this.options.importAlias.folder
-			}
+			},
+			outputFolder: this.options.tempPolymerBuildOutputPath
 		}));
 
 		// manual element import
@@ -132,8 +133,8 @@ module.exports = {
 
 	postBuild() {
 		if (this.options.buildForProduction.enabled) {
-			fs.removeSync(this.options.tempPolymerBuildOutputPath);
 			fs.removeSync(this.options.allImportsFile);
 		}
+		fs.removeSync(this.options.tempPolymerBuildOutputPath);
 	}
 };
