@@ -1,1 +1,1 @@
-import '@vaadin/vaadin-checkbox';
+import '@kuscamara/sample-lit-element';
