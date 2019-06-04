@@ -115,10 +115,6 @@ describe('ember-cli-build addon options', function() {
 		it('writes a script tag with the Polymer global settings', () => {
 			assertContains(outputFilePath('index.html'), '<script>window.Polymer = {');
 		});
-
-		it('writes the script tag before the import tag', () => {
-			assertContains(outputFilePath('index.html'), '</script>\n<link rel="import"');
-		});
 	});
 
 	context('Using "buildForProduction"', () => {
