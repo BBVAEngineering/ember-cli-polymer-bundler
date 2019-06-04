@@ -39,20 +39,17 @@ module.exports = {
 
 	// insert polyfills and bundled elements
 	contentFor(type, config) {
-		if (type !== 'head') {
-			return null;
+		if (type === 'head') {
+			const { globalPolymerSettings } = this.options;
+
+			if (globalPolymerSettings) {
+				return `<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`;
+			}
+		} else if (type === 'body-footer') {
+			return this.getBundleImport(config);
 		}
 
-		const headContents = [];
-		const { globalPolymerSettings } = this.options;
-
-		if (globalPolymerSettings) {
-			headContents.push(`<script>window.Polymer = ${JSON.stringify(globalPolymerSettings)};</script>`);
-		}
-
-		headContents.push(this.getBundleImport(config));
-
-		return headContents.join('\n');
+		return null;
 	},
 
 	getBundleImport(config) {
