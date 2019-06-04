@@ -79,7 +79,14 @@ module.exports = {
 		let elementPaths = packages.filter(exclude).map((pkg) => pkg.elementPath);
 
 		// ES6 imports
-		elementPaths = elementPaths.concat(extractModules(this.options.htmlImportsFile, this.options.litImportsFilename));
+		elementPaths = elementPaths.concat(extractModules({
+			filepath: this.options.htmlImportsFile,
+			litImportsFilename: this.options.litImportsFilename,
+			importAlias: {
+				key: `@${this.options.importAlias.key}`,
+				folder: this.options.importAlias.folder
+			}
+		}));
 
 		// manual element import
 		const manualPackagePaths = extractDeps(this.options.htmlImportsFile);
