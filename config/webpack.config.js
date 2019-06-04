@@ -1,19 +1,15 @@
 const path = require('path');
-const decamelize = require('decamelize');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const OUTPUT_PATH = 'dist/scripts/lit';
 
 const importMetaUriLoaderPath = require.resolve('@open-wc/webpack/loaders/import-meta-url-loader.js');
 const importBabelLoaderPath = require.resolve('babel-loader');
 const babelLoaderInNodeModules = importBabelLoaderPath.split('/babel-loader')[0];
 
-module.exports = ({ importFolder, litImportsFilename, alias }) => ({
+module.exports = ({ importFolder, litOutputFolder, litOutputFile, litImportsFilename, alias }) => ({
 	entry: { litComponents: path.join(importFolder, litImportsFilename) },
 	mode: 'production',
 	output: {
-		path: path.join(importFolder, OUTPUT_PATH),
-		publicPath: OUTPUT_PATH
+		path: litOutputFolder
 	},
 	module: {
 		rules: [
@@ -31,28 +27,6 @@ module.exports = ({ importFolder, litImportsFilename, alias }) => ({
 			}
 		]
 	},
-	optimization: {
-		splitChunks: {
-			chunks(chunk) {
-				chunk.name = decamelize(chunk.name, '-');
-				return true;
-			},
-			minSize: 20000,
-			maxSize: 100000,
-			minChunks: 1,
-			maxAsyncRequests: 5,
-			maxInitialRequests: 3,
-			automaticNameDelimiter: '-',
-			name: true,
-			cacheGroups: {
-				commons: {
-					minChunks: 2,
-					priority: -20,
-					reuseExistingChunk: true
-				}
-			}
-		}
-	},
 	resolve: {
 		alias
 	},
@@ -62,8 +36,8 @@ module.exports = ({ importFolder, litImportsFilename, alias }) => ({
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.join(importFolder, './lit-imports.html'),
-			filename: path.join(importFolder, '/lit-imports.html'),
+			template: path.join(litOutputFolder, litOutputFile),
+			filename: path.join(litOutputFolder, litOutputFile),
 			cache: false
 		})
 	]
