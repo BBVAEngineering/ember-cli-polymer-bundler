@@ -5,12 +5,11 @@ const importMetaUriLoaderPath = require.resolve('@open-wc/webpack/loaders/import
 const importBabelLoaderPath = require.resolve('babel-loader');
 const babelLoaderInNodeModules = importBabelLoaderPath.split('/babel-loader')[0];
 
-module.exports = ({ importFolder, litOutputFolder, litImportsFilename, alias }) => ({
+module.exports = ({ importFolder, litOutputFolder, litOutputFile, litImportsFilename, alias }) => ({
 	entry: { litComponents: path.join(importFolder, litImportsFilename) },
 	mode: 'production',
 	output: {
-		path: litOutputFolder,
-		publicPath: litOutputFolder
+		path: litOutputFolder
 	},
 	module: {
 		rules: [
@@ -37,8 +36,8 @@ module.exports = ({ importFolder, litOutputFolder, litImportsFilename, alias }) 
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.join(litOutputFolder, './lit-imports.html'),
-			filename: path.join(litOutputFolder, '/lit-imports.html'),
+			template: path.join(litOutputFolder, litOutputFile),
+			filename: path.join(litOutputFolder, litOutputFile),
 			cache: false
 		})
 	]

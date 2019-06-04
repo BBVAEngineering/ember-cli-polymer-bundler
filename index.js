@@ -11,6 +11,7 @@ const { scrapeDeps } = require('./lib/scraper');
 const extractDeps = require('./lib/extractor');
 const fs = require('fs-extra');
 const extractModules = require('./lib/modulesExtractor');
+const LIT_COMPONENTS_NAME = 'lit-imports.html';
 
 module.exports = {
 	name: require('./package').name,
@@ -82,6 +83,7 @@ module.exports = {
 		elementPaths = elementPaths.concat(extractModules({
 			filepath: this.options.htmlImportsFile,
 			litImportsFilename: this.options.litImportsFilename,
+			litOutputFile: LIT_COMPONENTS_NAME,
 			importAlias: {
 				key: `@${this.options.importAlias.key}`,
 				folder: this.options.importAlias.folder
