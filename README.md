@@ -70,6 +70,25 @@ If an element is not automatically imported, it probably does not follow the pol
 <link rel="import" href="../bower_components/some-element/some-element.html">
 ```
 
+### ES6 Modules Support (LitElement)
+
+To be able to include LitElement components in your app the bundlers has to support ES6 Modules imports. To do so you just need to install your components with npm and declare the imports in a file (default: es6-imports.js) in the same folder where your manual imports are. 
+```js
+import { WiredButton } from "wired-button"
+```
+If you want to declare components inside your project (not registered in npm) you can declare the folder with importAlias where the bundler will look for the components. 
+```bash
+├── app
+│   ├── elements
+│   │   └── my-element
+│   │       ├── package.json
+│   │       ├── my-element.js
+│   │       └── index.html
+...
+```
+```js
+import { MyElement } from "@elements/my-element"
+```
 ### Config variables
 
 The addon can be configured in `ember-cli-build.js` as such:
@@ -209,6 +228,28 @@ buildForProduction = {
 };
 ```
 
+#### litImportsFilename
+
+File to put ES6 imports in.
+
+Defaults to `es6-imports.js`.
+
+```js
+  litImportsFilename: 'es6-imports.js'
+```
+
+#### importAlias
+
+Folder and alias to your own components (not npm registered).
+
+Defaults to:
+
+```js
+importAlias: {
+  namespace: 'elements', // namespace to use in the import
+  folder: 'elements' // folder to look for the components
+}
+```
 ## About
 
 This addon was sponsored by [Fabriquartz](http://www.fabriquartz.com/), a startup based in The Netherlands.
