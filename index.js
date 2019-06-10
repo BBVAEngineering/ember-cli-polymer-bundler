@@ -89,12 +89,12 @@ module.exports = {
 				namespace: `@${this.options.importAlias.namespace}`,
 				folder: this.options.importAlias.folder
 			},
-			outputFolder: this.options.tempPolymerBuildOutputPath,
-			logger: this.ui.writeInfoLine
+			tempPolymerBuildOutputPath: this.options.tempPolymerBuildOutputPath
 		});
 
 		if (webpackConfigs.link) {
 			elementPaths.push(webpackConfigs.link);
+			webpackConfigs.outputFolder = this.options.tempPolymerBuildOutputPath;
 		}
 		// manual element import
 		const manualPackagePaths = extractDeps(this.options.htmlImportsFile);
@@ -141,8 +141,8 @@ module.exports = {
 
 	postBuild() {
 		if (this.options.buildForProduction.enabled) {
-			fs.removeSync(this.options.tempPolymerBuildOutputPath);
 			fs.removeSync(this.options.allImportsFile);
 		}
+		fs.removeSync(this.options.tempPolymerBuildOutputPath);
 	}
 };

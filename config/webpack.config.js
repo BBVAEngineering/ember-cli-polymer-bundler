@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const decamelize = require('decamelize');
 const importMetaUriLoaderPath = require.resolve('@open-wc/webpack/loaders/import-meta-url-loader.js');
 const importBabelLoaderPath = require.resolve('babel-loader');
 const babelLoaderInNodeModules = importBabelLoaderPath.split('/babel-loader')[0];
@@ -33,6 +33,28 @@ module.exports = ({ entries, litOutputFolder, litOutputFile, alias }) => ({
 	resolveLoader: {
 		modules: [babelLoaderInNodeModules, 'node_modules']
 
+	},
+	optimization: {
+		splitChunks: {
+			chunks(chunk) {
+				chunk.name = decamelize(chunk.name, '-');
+				return true;
+			},
+			minSize: 20000,
+			maxSize: 100000,
+			minChunks: 1,
+			maxAsyncRequests: 5,
+			maxInitialRequests: 3,
+			automaticNameDelimiter: '-',
+			name: true,
+			cacheGroups: {
+				commons: {
+					minChunks: 2,
+					priority: -20,
+					reuseExistingChunk: true
+				}
+			}
+		}
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
