@@ -79,8 +79,9 @@ module.exports = {
 		const exclude = (pkg) => !this.options.excludeElements.includes(pkg.name);
 		let elementPaths = packages.filter(exclude).map((pkg) => pkg.elementPath);
 
+
 		// ES6 imports
-		elementPaths = elementPaths.concat(extractModules({
+		const webpackConfigs = extractModules({
 			filepath: this.options.htmlImportsFile,
 			litImportsFilename: this.options.litImportsFilename,
 			litOutputFile: LIT_COMPONENTS_NAME,
@@ -88,9 +89,13 @@ module.exports = {
 				namespace: `@${this.options.importAlias.namespace}`,
 				folder: this.options.importAlias.folder
 			},
-			outputFolder: this.options.tempPolymerBuildOutputPath
-		}));
+			outputFolder: this.options.tempPolymerBuildOutputPath,
+			logger: this.ui.writeInfoLine
+		});
 
+		if (webpackConfigs.link) {
+			elementPaths.push(webpackConfigs.link);
+		}
 		// manual element import
 		const manualPackagePaths = extractDeps(this.options.htmlImportsFile);
 
@@ -123,7 +128,8 @@ module.exports = {
 			input: filepath,
 			output: this.options.bundlerOutput,
 			autoprefixer: this.options.autoprefixer,
-			buildForProduction
+			buildForProduction,
+			webpackConfigs
 		}, this.options.bundlerOptions);
 
 		// merge normal tree and our bundler tree
@@ -135,8 +141,8 @@ module.exports = {
 
 	postBuild() {
 		if (this.options.buildForProduction.enabled) {
+			fs.removeSync(this.options.tempPolymerBuildOutputPath);
 			fs.removeSync(this.options.allImportsFile);
 		}
-		fs.removeSync(this.options.tempPolymerBuildOutputPath);
 	}
 };
