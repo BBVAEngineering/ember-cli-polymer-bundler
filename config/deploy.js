@@ -2,8 +2,16 @@
 
 module.exports = function(deployTarget) {
 	const ENV = {
-		build: {}
-		// include other plugin configuration that applies to all deploy targets here
+		build: {},
+		'git-ci': {
+			userName: 'adrigzr',
+			userEmail: 'adrigzr@users.noreply.github.com',
+			deployKey: `${process.env.DEPLOY_KEY}\n`
+		},
+		git: {
+			worktreePath: 'deploy',
+			repo: 'git@github.com:BBVAEngineering/ember-cli-polymer-bundler.git'
+		}
 	};
 
 	if (deployTarget === 'development') {
