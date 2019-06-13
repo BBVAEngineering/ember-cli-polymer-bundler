@@ -85,10 +85,7 @@ module.exports = {
 			filepath: this.options.htmlImportsFile,
 			litImportsFilename: this.options.litImportsFilename,
 			litOutputFile: LIT_COMPONENTS_NAME,
-			importAlias: {
-				namespace: `@${this.options.importAlias.namespace}`,
-				folder: this.options.importAlias.folder
-			},
+			importAlias: this.options.importAlias,
 			tempPolymerBuildOutputPath: this.options.tempPolymerBuildOutputPath
 		});
 
