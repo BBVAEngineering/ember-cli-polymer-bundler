@@ -12,6 +12,22 @@ module.exports = function(defaults) {
 				browsers: ['chrome >= 30', 'firefox >= 32', 'ios >= 9', 'last 1 edge versions'],
 				enabled: true,
 				cascade: false
+			},
+			buildForProduction: {
+				enabled: true,
+				build: {
+					csp: true,
+					js: {
+						compile: true,
+						minify: true
+					},
+					css: {
+						minify: true
+					},
+					html: {
+						minify: true
+					}
+				}
 			}
 		}
 	});

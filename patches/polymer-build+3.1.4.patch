@@ -1,0 +1,42 @@
+diff --git a/node_modules/polymer-build/lib/babel-plugin-transform-block-scope-to-iife.js b/node_modules/polymer-build/lib/babel-plugin-transform-block-scope-to-iife.js
+new file mode 100644
+index 0000000..2bee39e
+--- /dev/null
++++ b/node_modules/polymer-build/lib/babel-plugin-transform-block-scope-to-iife.js
+@@ -0,0 +1,22 @@
++module.exports = function(babel) {
++	const t = babel.types;
++
++	const isProgramChild = (path) => path.parentPath.type === 'Program';
++	const iife = (path) => t.expressionStatement(
++		t.callExpression(
++			t.functionExpression(null, [], t.blockStatement(path.node.body)), []
++		)
++	);
++
++	return {
++		visitor: {
++			BlockStatement: {
++				exit(path) {
++					if (isProgramChild(path)) {
++						path.replaceWith(iife(path));
++					}
++				}
++			}
++		}
++	};
++};
+diff --git a/node_modules/polymer-build/lib/js-transform.js b/node_modules/polymer-build/lib/js-transform.js
+index 00b71cb..44c79cd 100644
+--- a/node_modules/polymer-build/lib/js-transform.js
++++ b/node_modules/polymer-build/lib/js-transform.js
+@@ -50,7 +50,8 @@ const babelTransformEs2015 = [
+     require('@babel/plugin-transform-destructuring'),
+     require('@babel/plugin-transform-block-scoping'),
+     require('@babel/plugin-transform-typeof-symbol'),
+-    require('@babel/plugin-transform-instanceof'),
++	require('@babel/plugin-transform-instanceof'),
++	require.resolve('./babel-plugin-transform-block-scope-to-iife.js'),
+     [
+         require('@babel/plugin-transform-regenerator'),
+         { async: false, asyncGenerators: false }
