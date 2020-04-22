@@ -1,3 +1,10 @@
+## [0.3.3](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.2...v0.3.3) (2020-04-22)
+
+
+### Bug Fixes
+
+* **package:** update polymer-project-builder ([d9664c3](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/d9664c3))
+
 ## [0.3.2](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.1...v0.3.2) (2019-03-28)
 
 
