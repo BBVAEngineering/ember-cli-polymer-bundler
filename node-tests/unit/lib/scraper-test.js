@@ -25,13 +25,7 @@ describe('scraper', () => {
 		assert.strictEqual(isWebComponent(pkg), false);
 	});
 
-	it.skip('recognizes web component with webcomponents.org badge', () => {
-		const pkg = require('../../fixtures/bower_components_fixture/canvas-datagrid/bower.json');
-
-		assert.ok(isWebComponent(pkg));
-	});
-
-	it('scrapes custom elements from local packages', () => {
+	it('scrapes custom elements from bower packages', () => {
 		const res = scrapeDeps(project.bowerDependencies(),
 			path.join(process.cwd(), project.bowerDirectory),
 			'bower.json');

@@ -3,7 +3,7 @@
 module.exports = {
 	root: true,
 	parserOptions: {
-		ecmaVersion: 2017,
+		ecmaVersion: 2018,
 		sourceType: 'module'
 	},
 	plugins: [
@@ -29,18 +29,17 @@ module.exports = {
 			'config/**/*.js',
 			'tests/dummy/config/**/*.js',
 			'lib/**/*.js',
-			'node-tests/**/**/*.js'
+			'index.js',
+			'node-tests/**/*.js'
 		],
 		excludedFiles: [
 			'addon/**',
 			'addon-test-support/**',
 			'app/**',
-			'tests/dummy/app/**',
-			'node-tests/addon/ember-cli-build-*.js'
+			'tests/dummy/app/**'
 		],
 		parserOptions: {
-			sourceType: 'script',
-			ecmaVersion: 2015
+			sourceType: 'script'
 		},
 		env: {
 			browser: false,

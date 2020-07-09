@@ -82,7 +82,7 @@ The addon can be configured in `ember-cli-build.js` as such:
 
 #### autoElementImport
 
-Indicates whether elements should be imported automatically. ember-cli-polymer-bundler automatically imports elements from bower and npm packages which have the `web-components` keyword and a valid [html import entry point](https://www.polymer-project.org/1.0/docs/tools/polymer-cli#element-project-layout). All elements at [customelements.io](https://customelements.io/) should be compatible.
+Indicates whether elements should be imported automatically. ember-cli-polymer-bundler automatically imports elements from bower packages which have the `web-components` keyword or a valid [html import entry point](https://www.polymer-project.org/1.0/docs/tools/polymer-cli#element-project-layout). All elements at [customelements.io](https://customelements.io/) should be compatible.
 
 Disable if you want full control over imports yourself. Defaults to `true`.
 
@@ -92,7 +92,7 @@ Disable if you want full control over imports yourself. Defaults to `true`.
 
 #### excludeElements
 
-A list with names of bower- or npm packages to exclude during auto element import. Comes in handy when you only want to manually import one specific file from a package, but not the entire element.
+A list with names of bower packages to exclude during auto element import. Comes in handy when you only want to manually import one specific file from a package, but not the entire element.
 
 Defaults to `[]`.
 
@@ -108,6 +108,18 @@ Defaults to `app/elements.html`.
 
 ```js
   htmlImportsFile: 'app/elements.html'
+```
+
+#### elementPaths
+
+List of paths that contains _in-app_ Web Components. The HTML bundle is only generated when components inside bower packages or the directories specified as `elementPaths` change.
+
+Defaults to `[]`.
+
+```js
+  elementPaths: [
+    'lib/some-folder/web-components'
+  ]
 ```
 
 #### bundlerOptions

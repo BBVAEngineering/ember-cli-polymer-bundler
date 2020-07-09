@@ -19,6 +19,7 @@
 /yarn-error.log
 /tags*
 /.nyc_output
+.vscode/*
 
 # ember-try
 /.node_modules.ember-try/
