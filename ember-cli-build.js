@@ -1,4 +1,3 @@
-/* eslint-env node */
 'use strict';
 
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
@@ -8,11 +7,9 @@ module.exports = function(defaults) {
 	const app = new EmberAddon(defaults, {
 		'ember-cli-polymer-bundler': {
 			htmlImportsFile: path.join('tests', 'dummy', 'app', 'elements.html'),
-			autoprefixer: {
-				browsers: ['chrome >= 30', 'firefox >= 32', 'ios >= 9', 'last 1 edge versions'],
-				enabled: true,
-				cascade: false
-			}
+			elementPaths: [
+				'tests/dummy/app/elements'
+			]
 		}
 	});
 

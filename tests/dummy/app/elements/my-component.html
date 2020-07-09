@@ -1,0 +1,26 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+
+<script>
+	class MyComponent extends Polymer.Element {
+		static get template() {
+			return Polymer.html`
+				<style>
+					:host {
+						display: block;
+						outline: 1px solid #3f51b5;
+						padding: 1rem;
+						margin: 1rem 0;
+					}
+
+					::slotted(*) {
+						margin: 0;
+					}
+				</style>
+
+				<slot></slot>
+			`;
+		}
+	}
+
+	customElements.define('my-component', MyComponent);
+</script>
