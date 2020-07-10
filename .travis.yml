@@ -16,7 +16,6 @@ env:
     - JOBS=1
 
 jobs:
-  fail_fast: true
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
@@ -56,7 +55,7 @@ jobs:
       script: skip
       deploy:
         provider: script
-        skip_cleanup: true
+        cleanup: true
         script:
           - npx semantic-release
 
@@ -70,7 +69,7 @@ install:
   - bower install
 
 script:
-  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup
+  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup --- mocha --recursive node-tests
 
 stages:
   - "Tests"
