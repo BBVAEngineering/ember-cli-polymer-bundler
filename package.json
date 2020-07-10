@@ -2,6 +2,11 @@
   "name": "ember-cli-polymer-bundler",
   "version": "0.3.3",
   "description": "Allows you to use Polymer in your Ember application.",
+  "files": [
+    "index.js",
+    "lib",
+    "polyfills"
+  ],
   "scripts": {
     "build": "ember build",
     "lint:hbs": "ember-template-lint .",
