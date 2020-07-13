@@ -1,3 +1,35 @@
+# [1.0.0](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.3...v1.0.0) (2020-07-13)
+
+
+### Bug Fixes
+
+* **travis:** wrong syntax ([db58a1e](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/db58a1e3e825e159038873643ee1331c9748d442))
+
+
+### Features
+
+* rebuild bundle only on changes ([8420dd6](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/commit/8420dd61964938c83615b48970bf67b766cdc8bf))
+
+
+### BREAKING CHANGES
+
+* web components are not looked for inside node_modules any more
+
+chore(vscode): remove folder
+
+feat: use caching-writer to prevent unneeded rebuilds
+* web components are not looked for inside node_modules any more (assuming using Polymer & Bower)
+
+style: change eslint settings and remove eslint file comments
+
+refactor: rename property
+
+test: remove skipped tests for not implemented functionality
+
+test: increase coverage thresholds
+
+docs(readme): document new property and changes
+
 ## [0.3.3](https://github.com/BBVAEngineering/ember-cli-polymer-bundler/compare/v0.3.2...v0.3.3) (2020-04-22)
 
 
