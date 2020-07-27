@@ -1,9 +1,7 @@
-'use strict';
-
 module.exports = {
-	extends: 'recommended',
+	extends: 'octane',
 	rules: {
-		'no-bare-strings': false,
+		'no-bare-strings': true,
 		'block-indentation': 'tab',
 		'no-html-comments': true,
 		'no-nested-interactive': true,

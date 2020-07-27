@@ -1,3 +1,4 @@
+/* eslint-disable no-unsanitized/method */
 'use strict';
 
 const path = require('path');
