@@ -24,7 +24,6 @@
         before_install:
           - npm config set spin false
           - npm install -g npm@6
-          - npm install -g bower
           - npm install -g codecov
           - npm install -g greenkeeper-lockfile@1
           - npm install -g @commitlint/travis-cli
@@ -41,7 +40,8 @@
         after_script:
           - greenkeeper-lockfile-upload
         after_success:
-          - codecov --file=coverage/lcov.info
+          - codecov --file=coverage/node/lcov.info
+          - codecov --file=coverage/ember/lcov.info
   
       - stage: "Regression Tests"
         env: EMBER_TRY_SCENARIO=ember-lts-3.12
@@ -56,15 +56,19 @@
         deploy:
           provider: script
           skip_cleanup: true
-          script: npx semantic-release
+          script: npx -p @semantic-release/changelog -p @semantic-release/git -p semantic-release semantic-release
   
   before_install:
     - npm config set spin false
     - npm install -g npm@6
     - npm --version
+
+  install:
+    - npm ci
+    - bower install
   
   script:
-    - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip_cleanup
+    - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup --- mocha --recursive node-tests
   
   stages:
     - "Tests"
