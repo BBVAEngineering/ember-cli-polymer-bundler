@@ -68,11 +68,13 @@ describe('ember-cli-build addon options', function() {
 
 		before(() => {
 			mockConfig(mockConfigFile);
+
 			return runEmberCommand(fixturePath, 'build --prod');
 		});
 
 		after(() => {
 			restoreConfig(mockConfigFile);
+
 			return cleanup(fixturePath);
 		});
 
@@ -86,11 +88,13 @@ describe('ember-cli-build addon options', function() {
 
 		before(() => {
 			mockConfig(mockConfigFile);
+
 			return runEmberCommand(fixturePath, 'build --prod');
 		});
 
 		after(() => {
 			restoreConfig(mockConfigFile);
+
 			return cleanup(fixturePath);
 		});
 
@@ -104,11 +108,13 @@ describe('ember-cli-build addon options', function() {
 
 		before(() => {
 			mockConfig(mockConfigFile);
+
 			return runEmberCommand(fixturePath, 'build --prod');
 		});
 
 		after(() => {
 			restoreConfig(mockConfigFile);
+
 			return cleanup(fixturePath);
 		});
 
@@ -126,11 +132,13 @@ describe('ember-cli-build addon options', function() {
 
 		before(() => {
 			mockConfig(mockConfigFile);
+
 			return runEmberCommand(fixturePath, 'build --prod');
 		});
 
 		after(() => {
 			restoreConfig(mockConfigFile);
+
 			return cleanup(fixturePath);
 		});
 
@@ -149,11 +157,13 @@ describe('ember-cli-build addon options', function() {
 
 		before(() => {
 			mockConfig(mockConfigFile);
+
 			return runEmberCommand(fixturePath, 'build --prod');
 		});
 
 		after(() => {
 			restoreConfig(mockConfigFile);
+
 			return cleanup(fixturePath);
 		});
 

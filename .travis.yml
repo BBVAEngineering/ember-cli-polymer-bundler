@@ -1,79 +1,79 @@
 ---
-language: node_js
-os: linux
-node_js: lts/erbium
-dist: trusty
-
-addons:
-  chrome: stable
-
-cache:
-  directories:
-    - $HOME/.npm
-
-env:
-  global:
-    - JOBS=1
-
-jobs:
-  allow_failures:
-    - env: EMBER_TRY_SCENARIO=ember-canary
-
-  include:
-    - stage: "Tests"
-      before_install:
-        - npm config set spin false
-        - npm install -g npm@6
-        - npm install -g codecov
-        - npm install -g greenkeeper-lockfile@1
-        - npm install -g @commitlint/travis-cli
-        - npm --version
-      install:
-        - if [[ $TRAVIS_BRANCH =~ greenkeeper || $TRAVIS_PULL_REQUEST_BRANCH =~ greenkeeper ]]; then npm install; else npm ci; fi
-        - bower install
-      before_script:
-        - greenkeeper-lockfile-update
-      script:
-        - commitlint-travis
-        - npm run lint:js
-        - npm run lint:hbs
-        - npm test
-      after_script:
-        - greenkeeper-lockfile-upload
-      after_success:
-        - codecov --file=coverage/node/lcov.info
-        - codecov --file=coverage/ember/lcov.info
-
-    - stage: "Regression Tests"
-      env: EMBER_TRY_SCENARIO=ember-lts-3.8
-    - env: EMBER_TRY_SCENARIO=ember-release
-    - env: EMBER_TRY_SCENARIO=ember-beta
-    - env: EMBER_TRY_SCENARIO=ember-canary
-    - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
-
-    - stage: "Release"
-      script: skip
-      deploy:
-        provider: script
-        cleanup: true
+  language: node_js
+  os: linux
+  node_js: stable
+  dist: trusty
+  
+  addons:
+    chrome: stable
+  
+  cache:
+    directories:
+      - $HOME/.npm
+  
+  env:
+    global:
+      - JOBS=1
+  
+  jobs:
+    allow_failures:
+      - env: EMBER_TRY_SCENARIO=ember-canary
+  
+    include:
+      - stage: "Tests"
+        before_install:
+          - npm config set spin false
+          - npm install -g npm@6
+          - npm install -g codecov
+          - npm install -g greenkeeper-lockfile@1
+          - npm install -g @commitlint/travis-cli
+          - npm --version
+        install:
+          - if [[ $TRAVIS_BRANCH =~ greenkeeper || $TRAVIS_PULL_REQUEST_BRANCH =~ greenkeeper ]]; then npm install; else npm ci; fi
+        before_script:
+          - greenkeeper-lockfile-update
         script:
-          - npx -p @semantic-release/changelog -p @semantic-release/git -p semantic-release semantic-release
+          - commitlint-travis
+          - npm run lint:js
+          - npm run lint:hbs
+          - npm test
+        after_script:
+          - greenkeeper-lockfile-upload
+        after_success:
+          - codecov --file=coverage/node/lcov.info
+          - codecov --file=coverage/ember/lcov.info
+  
+      - stage: "Regression Tests"
+        env: EMBER_TRY_SCENARIO=ember-lts-3.12
+      - env: EMBER_TRY_SCENARIO=ember-lts-3.16
+      - env: EMBER_TRY_SCENARIO=ember-release
+      - env: EMBER_TRY_SCENARIO=ember-beta
+      - env: EMBER_TRY_SCENARIO=ember-canary
+      - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
+  
+      - stage: "Release"
+        script: skip
+        deploy:
+          provider: script
+          skip_cleanup: true
+          script: npx -p @semantic-release/changelog -p @semantic-release/git -p semantic-release semantic-release
+  
+  before_install:
+    - npm config set spin false
+    - npm install -g npm@6
+    - npm --version
 
-before_install:
-  - npm config set spin false
-  - npm install -g npm@6
-  - npm --version
-
-install:
-  - npm ci
-  - bower install
-
-script:
-  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup --- mocha --recursive node-tests
-
-stages:
-  - "Tests"
-  - "Regression Tests"
-  - name: "Release"
-    if: branch = master
-
+  install:
+    - npm ci
+    - bower install
+  
+  script:
+    - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup --- mocha --recursive node-tests
+  
+  stages:
+    - "Tests"
+    - "Regression Tests"
+    - name: "Release"
+      if: branch = master
+    - name: "Deploy"
+      if: branch = master
