@@ -72,4 +72,4 @@
     - name: "Release"
       if: branch = master
     - name: "Deploy"
-        if: branch = master
+      if: branch = master
