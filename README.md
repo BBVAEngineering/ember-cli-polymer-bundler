@@ -1,3 +1,5 @@
+# DEPRECATED
+
 # ember-cli-polymer-bundler
 
 [![Build Status](https://travis-ci.org/BBVAEngineering/ember-cli-polymer-bundler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-cli-polymer-bundler)
